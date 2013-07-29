@@ -1,0 +1,5 @@
+name = Webform Update Submission
+description = Updates specified fields in a webform submission. This aids my Rule(s) in my pay-to-publish advertising content
+version = 7.x-0.1
+core = 7.x
+dependencies[] = webform

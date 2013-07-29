@@ -1,0 +1,8 @@
+filename = "Advert-TaxonomySolutionBackup1-2013-07-15T22-42-19"
+description = ""
+datestamp = "1373924540"
+generator = "Backup and Migrate (http://drupal.org/project/backup_migrate)"
+generatorversion = "7.x-2.x"
+sites[0][version] = "7.22"
+sites[0][name] = "Revival Times Server [prototype]"
+sites[0][url] = "http://178.79.128.76/revivaltimes/"

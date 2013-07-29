@@ -1,0 +1,178 @@
+<?php
+
+#based on: http://www.androidhive.info/2012/10/android-push-notifications-using-google-cloud-messaging-gcm-php-and-mysql/
+
+function gcm_init(){
+	// drupal_set_message("GCM responding!");
+}
+
+function gcm_menu() {
+	$items['admin/gcm/register'] = array(
+		'title' => 'GCM Register',
+		'description' => 'Intercepts GCM registration requests',
+		'page callback' => 'gcm_registration',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	$items['admin/gcm/unregister'] = array(
+		'title' => 'GCM un-Register',
+		'description' => 'Intercepts GCM un-registration requests',
+		'page callback' => 'gcm_unregistration',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	$items['admin/gcm/call'] = array(
+		'title' => 'GCM Call',
+		'description' => 'Calls GCM server',
+		'page callback' => 'gcm_call',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	return $items;
+}
+
+function gcm_registration($ghi = 0, $jkl = '') {
+
+	print "<pre>";
+	print_r($_POST);
+	print "</pre>";
+	
+	$regid = isset($_POST['regid']) ? $_POST['regid'] : 7;
+	$name  = isset($_POST['name']) ? $_POST['name'] : 'name';
+	$email = isset($_POST['email']) ? $_POST['email'] : 'name@naming.com';
+
+	watchdog("GCM", "Registering user: {$name}, with email: {$email} and RegistrationID: {$regid}");
+
+	$nid = db_insert('gcm') // Table name no longer needs {}
+		->fields(array(
+		  'regid' 	=> $regid,
+		  'name'	=> $name,
+		  'email' 	=> $email,
+		  'created' => REQUEST_TIME,
+		))->execute();
+		
+	return '';
+}
+
+function gcm_unregistration() {
+
+	/*$nid = 5;
+	$num_deleted = db_delete('node')
+  		->condition('nid', $nid)
+  		->execute();*/	
+	$regid = isset($_POST['regid']) ? $_POST['regid'] : 7;
+
+	if($regid)
+		watchdog("GCM", "UN-registering RegistrationID: {$regid}");
+	else
+		watchdog("GCM", 'DUDE, pass me some real data! Failed to un-register due to empty RegID', array(), WATCHDOG_ERROR);
+
+		/*watchdog("GCM", 'DUDE, pass me some real data! Failed to un-register due to empty RegID');//, array('%regid'=>$regid), WATCHDOG_ERROR);*/
+
+
+		/*watchdog('image', 'Cached image file %destination already exists. There may be an issue with your rewrite configuration.', array('%destination' => $destination), WATCHDOG_ERROR);*/
+
+	 	/*watchdog('PHP', "Error message: %error<br>\n%object<br>\n%bt", 
+	 						array('%error' => $error, '%object' => $object_msg, '%bt' => $bt), 
+	 							WATCHDOG_ERROR);*/
+
+	db_delete('gcm') // Table name no longer needs {}
+		->condition('regid', $regid)
+		->execute();
+}
+
+function gcm_call($node=null) {
+
+	// if(!$node)
+	// 	return;
+
+/*db_select('contact', 'c')
+    ->fields('c')
+    ->execute()
+    ->fetchAssoc();*/
+
+	$registrations = db_select('gcm')
+		->fields('gcm')
+		->execute()
+		->fetchAll();
+
+	if(sizeof($registrations) == 0){
+		print "<br>No registrations to GCM-message!";
+		return;
+	}
+
+	$registrationIDs = array();
+	foreach ($registrations as $obj) {
+		array_push($registrationIDs, $obj->regid);
+	}
+	// $castList = implode(',', $castList);
+	/*print "<pre>";
+	print_r($castList);
+	print "</pre>";*/
+
+	// Replace with real server API key from Google APIs  
+	$apiKey = 'AIzaSyAxPTK0vlWnInyF4mRxIaqOdfuXD3Z1AbA';//"your api key";    
+
+	// Replace with real client registration IDs
+	/*$id1 = 'APA91bEM_dMasUP5d5yLZzCNNPd931QdNWfWVwn-MNE7ZGlmR3eL6AUkVJsm5Psyo3TMuLlXpAH10Rh9vdfEiSEd3OG1KQoXV1ZMFXo_7qw_HepWu3w8X78GhyBqyDwrP-ahLfOOJ7hDBoXJnvvBczifcgvAaOX63A';
+	$id2 = 'abc777';*/
+	// $registrationIDs = array( "reg id1","reg id2");
+	// $registrationIDs = array($id1, $id2);
+	// $registrationIDs = $castList;
+
+	// Message to be sent
+	$nid 	 = $node ? $node->nid : 0;
+	$message = $node ? "{$node->title} - {$nid}" : "I say, I SAY ... GCM ROCKS!!!";
+
+	// Set POST variables
+	$url = 'https://android.googleapis.com/gcm/send';
+
+	$fields = array(
+		'registration_ids' => $registrationIDs,
+		'data' => array('message' => $message, 'nid' => $nid),
+	);
+	/*if($node){
+		$fields['data']['nid'] = $node->nid;
+	}*/
+
+	$headers = array(
+		'Authorization: key=' . $apiKey,
+		'Content-Type: application/json'
+	);
+
+	watchdog("GCM", "Calling GCM server with a message for ". sizeof($registrationIDs) ." recipient(s).");
+
+	// Open connection
+	$ch = curl_init();
+
+	// Set the url, number of POST vars, POST data
+	curl_setopt( $ch, CURLOPT_URL, $url );
+	curl_setopt( $ch, CURLOPT_POST, true );
+	curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	//curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
+
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	//     curl_setopt($ch, CURLOPT_POST, true);
+	//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields ));
+
+	// Execute post
+	$result = curl_exec($ch);
+
+	// Close connection
+	curl_close($ch);
+	echo $result;
+	//print_r($result);
+	//var_dump($result);
+}
+
+function gcm_node_update($node){
+	$nodes = array('event', 'article');
+	if( in_array($node->type, $nodes) && $node->status == 1 )// && ($node->created == $node->changed) )
+		gcm_call($node);
+}
+
+/*function gcm_node_view($node, $view_mode, $langcode){
+	drupal_set_message("View Mode: {$view_mode}");
+}*/

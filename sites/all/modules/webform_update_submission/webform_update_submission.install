@@ -1,0 +1,17 @@
+<?php
+
+function webform_update_submission_schema() {
+	/*return array(
+		'webform_update_submission' => array(
+		'description' => '',
+		'fields' => array(
+			'id'     => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+			'regid'  => array('type' => 'varchar','length' => 12,'not null' => TRUE,'default' => ''),
+			'name'   => array('type' => 'varchar','length' => 255,'not null' => TRUE, 'default' => ''),
+			'email'  => array('type' => 'varchar','length' => 255,'not null' => TRUE, 'default' => ''),
+			'created'=> array('type' => 'int', 'not null' => TRUE, 'default' => 0),
+		),
+		'primary key' => array('id'),
+		)
+	);*/
+}

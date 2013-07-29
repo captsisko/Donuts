@@ -1,0 +1,5 @@
+name = Advert Customizations
+description = Add custom rules etc to aid the advertisement creation
+version = 7.x-0.1
+core = 7.x
+package = iCerge

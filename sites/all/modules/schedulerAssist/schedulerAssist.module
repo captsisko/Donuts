@@ -1,0 +1,36 @@
+<?php
+
+function schedulerAssist_init(){
+	// drupal_set_message("Scheduler-Assist responding!");
+}
+
+function schedulerAssist_form_alter(&$form, &$form_state, $form_id){
+	// drupal_set_message("Form-ID: {$form_id}");
+
+	if( isset($form['scheduler_settings']) ){
+		// dsm($form['scheduler_settings']);
+	
+		$form['scheduler_settings']['publish_on']['#required'] = false;
+		// $form['scheduler_settings']['publish_on']['#element_validate'] = array(true);
+		$form['scheduler_settings']['unpublish_on']['#required'] = false;
+	}
+}
+
+function schedulerAssist_form_article_node_form_alter(&$form, &$form_state, $form_id){
+	// drupal_set_message("Article Form-ID: {$form_id}", 'warning');	
+}
+
+/*function schedulerAssist_form_alter($form, $form_state, $form_id){
+}
+
+function schedulerAssist_form_article_node_form_alter($form, $form_state, $form_id){
+	drupal_set_message("Form-ID: {$form_id}");
+	dsm($form);
+	$form['scheduler_settings']['publish_on']['#required'] = false;
+	$form['scheduler_settings']['publish_on']['#element_validate'] = array(true);
+	$form['scheduler_settings']['unpublish_on']['#required'] = false;
+}
+
+function schedulerAssist_form_article_node_form_validate($form, $form_state) {
+	drupal_set_message('custom validation responding');
+}*/

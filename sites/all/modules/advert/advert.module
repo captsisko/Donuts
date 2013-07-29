@@ -1,0 +1,37 @@
+<?php
+
+#based on: http://www.androidhive.info/2012/10/android-push-notifications-using-google-cloud-messaging-gcm-php-and-mysql/
+
+function advert_init(){
+	// drupal_set_message("Advert-Rules responding!");
+	// $product = entity_load('commerce_product');
+	// $product = entity_load('commerce_product', array(20));
+	// dsm($product, 'product');
+	/*$node = node_load('node/39');
+	dsm($node, 'testing');*/
+}
+
+function advert_menu() {
+	/*$items['admin/gcm/register'] = array(
+		'title' => 'GCM Register',
+		'description' => 'Intercepts GCM registration requests',
+		'page callback' => 'advert_registration',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	$items['admin/gcm/unregister'] = array(
+		'title' => 'GCM un-Register',
+		'description' => 'Intercepts GCM un-registration requests',
+		'page callback' => 'advert_unregistration',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	$items['admin/gcm/call'] = array(
+		'title' => 'GCM Call',
+		'description' => 'Calls GCM server',
+		'page callback' => 'advert_call',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	return $items;*/
+}

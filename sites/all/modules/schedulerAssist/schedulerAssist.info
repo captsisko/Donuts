@@ -1,0 +1,6 @@
+name = Scheduler-Assist
+description = Makes specific customizations to the Scheduler module to meet my specific needs
+project = "scheduler"
+dependencies[] = "scheduler"
+version = 7.x-0.1
+core = 7.x

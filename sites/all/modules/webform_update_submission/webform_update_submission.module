@@ -1,0 +1,34 @@
+<?php
+
+// module_load_include('inc', 'webform_update_submission', 'webform_update_submission.rules');
+
+function webform_update_submission_init(){
+	// drupal_set_message("webform_update_submission responding!");
+
+	// $views = views_get_all_views();
+	// dsm($views);
+}
+
+function webform_update_submission_menu() {
+/*	$items['admin/webform_update_submission/register'] = array(
+		'title' => 'webform_update_submission Register',
+		'description' => 'Intercepts webform_update_submission registration requests',
+		'page callback' => 'webform_update_submission_registration',
+		'access callback' => TRUE,
+		'expanded' => TRUE,
+	);
+	return $items;*/
+}
+
+function _webform_update_submission($nid=null, $obj=null) {
+	/*drupal_set_message("custom module function responding: NID#{$nid}");
+	print"<pre>";
+	print_r($obj);
+	print"</pre>";*/
+}
+
+function webform_update_submission_views_pre_render(&$view){
+	// dpm($view, 'views_pre_render');
+	// drupal_set_message("Display View: {$view->name}");
+	// rules_invoke_event('webform_update_submission_event_view_render', $view->name);
+}
